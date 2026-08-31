@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+    <title>Unity Web Player | Match Forever</title>
+    <style>
+      html, body { height: 100%; }
+      body {
+        padding: 0; border: 0; margin: 0;
+        background: #000;                 /* letterbox bars on wide screens */
+        overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+      }
+      #unity-canvas { display: block; background: #231F20; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <script src="Build/WebGL.loader.js"></script>
+    <script>
+      // Portrait-lock (v5 T16): this is a portrait phone game. On tall/portrait windows the canvas fills the
+      // screen; on windows WIDER than MAX_ASPECT (desktop / landscape) it is capped to a portrait strip and
+      // centered, so the black body shows as letterbox bars on the sides. This keeps the in-game camera in a
+      // portrait aspect everywhere, so the looming enemy/boss always sits ABOVE the board (never over the tiles).
+      var canvas = document.querySelector("#unity-canvas");
+      var MAX_ASPECT = 0.6; // widest allowed width/height (~10:16.7); portrait phones are narrower and fill fully
+      function resizeCanvas() {
+        var ww = window.innerWidth, wh = window.innerHeight;
+        var w = ww, h = wh;
+        if (ww / wh > MAX_ASPECT) { w = Math.round(wh * MAX_ASPECT); h = wh; } // too wide → letterbox
+        // Pin the body to the VISIBLE viewport height. On mobile Safari/Chrome the address bar makes
+        // window.innerHeight (used for the canvas) smaller than a CSS height:100% body, which would center
+        // the canvas with a black gap at the top until the first touch. Matching them fills from the top.
+        document.body.style.height = wh + "px";
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      createUnityInstance(canvas, {
+        arguments: [],
+        dataUrl: "Build/WebGL.data.unityweb",
+        frameworkUrl: "Build/WebGL.framework.js.unityweb",
+        codeUrl: "Build/WebGL.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Match Forever",
+        productVersion: "1.0",
+      }).then((unityInstance) => {
+        resizeCanvas();
+      }).catch((message) => {
+        alert(message);
+      });
+    </script>
+  </body>
+</html>
