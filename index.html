@@ -9,7 +9,11 @@
       html, body { height: 100%; }
       body {
         padding: 0; border: 0; margin: 0;
-        background: linear-gradient(180deg, #f3d7cb 0%, #ecc9d7 46%, #d2e7e1 100%); /* pastel letterbox bars on wide screens */
+        /* Letterbox bars on wide/desktop windows. This is a portrait-locked phone game, so on a wide window
+           (e.g. Telegram Desktop's in-app browser) the portrait strip is centered and these bars show on the
+           sides. A soft pastel gradient in the game's palette (peach -> pink -> mint) reads as intentional
+           instead of a broken black void. On phones the game fills the screen and no bars are visible. */
+        background: linear-gradient(180deg, #f3d7cb 0%, #ecc9d7 46%, #d2e7e1 100%);
         overflow: hidden;
         display: flex; align-items: center; justify-content: center;
       }
