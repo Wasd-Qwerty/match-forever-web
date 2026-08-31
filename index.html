@@ -20,6 +20,27 @@
     <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
     <script src="Build/WebGL.loader.js"></script>
     <script>
+      // Swallow the non-fatal IndexedDB persistence error (v5 T24). In-app browsers (Telegram, Instagram,
+      // etc.) and private mode often block IndexedDB, so Emscripten's IDBFS.syncfs -> reconcile throws
+      //   "TypeError: undefined is not an object (evaluating 'dst.entries')"
+      // when Unity tries to persist PlayerPrefs. The game runs fine (prefs just won't survive the session on
+      // that browser), but Unity's default handler pops a scary "An error occurred running the Unity content"
+      // dialog. Catch it in the capture phase and stop it before Unity's handler sees it. Everything else still
+      // surfaces normally.
+      window.addEventListener("error", function (e) {
+        var msg = (e && e.message) || "";
+        if (msg.indexOf("dst.entries") !== -1 || msg.indexOf("reconcile") !== -1) {
+          console.warn("[MatchForever] Suppressed IDBFS persistence error (IndexedDB blocked?): " + msg);
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          return true;
+        }
+      }, true);
+      window.addEventListener("unhandledrejection", function (e) {
+        var msg = (e && e.reason && (e.reason.message || e.reason)) || "";
+        if (String(msg).indexOf("dst.entries") !== -1) { e.preventDefault(); }
+      });
+
       // Portrait-lock (v5 T16): this is a portrait phone game. On tall/portrait windows the canvas fills the
       // screen; on windows WIDER than MAX_ASPECT (desktop / landscape) it is capped to a portrait strip and
       // centered, so the black body shows as letterbox bars on the sides. This keeps the in-game camera in a
