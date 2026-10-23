@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+    <title>Unity Web Player | Swap Duel</title>
+    <style>
+      html, body { height: 100%; }
+      body {
+        padding: 0; border: 0; margin: 0;
+        /* Letterbox bars on wide/desktop windows. This is a portrait-locked phone game, so on a wide window
+           (e.g. Telegram Desktop's in-app browser) the portrait strip is centered and these bars show on the
+           sides. A soft pastel gradient in the game's palette (peach -> pink -> mint) reads as intentional
+           instead of a broken black void. On phones the game fills the screen and no bars are visible. */
+        background: linear-gradient(180deg, #f3d7cb 0%, #ecc9d7 46%, #d2e7e1 100%);
+        overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+      }
+      #unity-canvas { display: block; background: #231F20; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <script src="Build/WebGLProbe.loader.js"></script>
+    <script>
+      // Swallow the non-fatal IndexedDB persistence error (v5 T24). In-app browsers (Telegram, Instagram,
+      // etc.) and private mode often block IndexedDB, so Emscripten's IDBFS.syncfs -> reconcile throws
+      //   "TypeError: undefined is not an object (evaluating 'dst.entries')"
+      // when Unity tries to persist PlayerPrefs. The game runs fine (prefs just won't survive the session on
+      // that browser), but Unity's default handler pops a scary "An error occurred running the Unity content"
+      // dialog. Catch it in the capture phase and stop it before Unity's handler sees it. Everything else still
+      // surfaces normally.
+      window.addEventListener("error", function (e) {
+        var msg = (e && e.message) || "";
+        if (msg.indexOf("dst.entries") !== -1 || msg.indexOf("reconcile") !== -1) {
+          console.warn("[MatchForever] Suppressed IDBFS persistence error (IndexedDB blocked?): " + msg);
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          return true;
+        }
+      }, true);
+      window.addEventListener("unhandledrejection", function (e) {
+        var msg = (e && e.reason && (e.reason.message || e.reason)) || "";
+        if (String(msg).indexOf("dst.entries") !== -1) { e.preventDefault(); }
+      });
+
+      // Portrait-lock (v5 T16): this is a portrait phone game. On tall/portrait windows the canvas fills the
+      // screen; on windows WIDER than MAX_ASPECT (desktop / landscape) it is capped to a portrait strip and
+      // centered, so the black body shows as letterbox bars on the sides. This keeps the in-game camera in a
+      // portrait aspect everywhere, so the looming enemy/boss always sits ABOVE the board (never over the tiles).
+      var canvas = document.querySelector("#unity-canvas");
+      var MAX_ASPECT = 0.6; // widest allowed width/height (~10:16.7); portrait phones are narrower and fill fully
+      function resizeCanvas() {
+        var ww = window.innerWidth, wh = window.innerHeight;
+        var w = ww, h = wh;
+        if (ww / wh > MAX_ASPECT) { w = Math.round(wh * MAX_ASPECT); h = wh; } // too wide → letterbox
+        // Pin the body to the VISIBLE viewport height. On mobile Safari/Chrome the address bar makes
+        // window.innerHeight (used for the canvas) smaller than a CSS height:100% body, which would center
+        // the canvas with a black gap at the top until the first touch. Matching them fills from the top.
+        document.body.style.height = wh + "px";
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      createUnityInstance(canvas, {
+        arguments: [],
+        dataUrl: "Build/WebGLProbe.data.unityweb",
+        frameworkUrl: "Build/WebGLProbe.framework.js.unityweb",
+        codeUrl: "Build/WebGLProbe.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Rigoraft",
+        productName: "Swap Duel",
+        productVersion: "0.1.0",
+      }).then((unityInstance) => {
+        resizeCanvas();
+      }).catch((message) => {
+        alert(message);
+      });
+    </script>
+  </body>
+</html>
