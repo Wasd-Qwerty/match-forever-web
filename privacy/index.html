@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Swap Duel Privacy Policy</title>
+<!-- Source of https://wasd-qwerty.github.io/match-forever-web/privacy/ (repo match-forever-web, folder privacy/);
+     the URL keeps the game's old name on purpose: it is built into the app.
+     The page follows the Android release build (no MF_BACKEND): no statistics (PostHogSink.Token is empty; if a
+     release sets it, bring back the "Gameplay statistics" section from this file's history first), the optional
+     nickname sent to the friend in a duel by code, Unity Authentication + Relay for a duel by code over the internet,
+     and Unity's engine diagnostics. One page, two languages: English by default, Russian when the browser's first
+     language is ru or be; #en / #ru in the URL pick one. Without JavaScript both show, English first. -->
+<style>
+  :root { --bg: #f6f7fb; --card: #ffffff; --text: #1d2233; --muted: #5d6478; --accent: #2a55dc; --line: #e3e6ef; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12141c; --card: #1a1d28; --text: #e8eaf2; --muted: #a0a6b8; --accent: #8aa6ff; --line: #2b2f3d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.6 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  article { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 22px; }
+  article + article { margin-top: 24px; }
+  article { scroll-margin-top: 70px; } /* a #en / #ru jump keeps the language links in view */
+  h1 { font-size: 26px; line-height: 1.25; margin: 0 0 6px; }
+  h2 { font-size: 18px; margin: 28px 0 8px; }
+  p, ul { margin: 0 0 12px; }
+  ul { padding-left: 22px; }
+  li { margin: 4px 0; }
+  .meta { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  a { color: var(--accent); }
+  nav { text-align: right; font-size: 14px; margin-bottom: 12px; color: var(--muted); }
+  html[data-lang="en"] article[lang="ru"], html[data-lang="ru"] article[lang="en"] { display: none; }
+  html[data-lang="en"] nav a[href="#en"], html[data-lang="ru"] nav a[href="#ru"] {
+    color: var(--text); font-weight: 600; text-decoration: none; }
+</style>
+<script>
+  (function () {
+    var root = document.documentElement;
+    function pick() {
+      var hash = location.hash.slice(1);
+      if (hash === "en" || hash === "ru") return hash;
+      var first = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      var base = first.toLowerCase().split("-")[0];
+      return base === "ru" || base === "be" ? "ru" : "en";
+    }
+    function apply() {
+      var lang = pick();
+      root.lang = lang;
+      root.setAttribute("data-lang", lang);
+      document.title = lang === "ru" ? "Swap Duel — политика конфиденциальности" : "Swap Duel Privacy Policy";
+    }
+    apply();
+    window.addEventListener("hashchange", function () { apply(); window.scrollTo(0, 0); });
+  })();
+</script>
+</head>
+<body>
+<main>
+<nav><a href="#en" hreflang="en" lang="en">English</a> · <a href="#ru" hreflang="ru" lang="ru">Русский</a></nav>
+
+<article lang="en" id="en">
+<h1>Swap Duel Privacy Policy</h1>
+<p class="meta">Effective October 25, 2026 · Developer: Rigoraft · Contact:
+<a id="contact-en" href="mailto:support@rigoraft.com">support@rigoraft.com</a></p>
+
+<p><strong>In short.</strong> Swap Duel doesn’t need an account and never asks for your email or phone number; a
+nickname is optional. The game doesn’t ask for access to your contacts, photos, microphone, or location, shows no ads,
+and has no in-app purchases. This version of the game sends us no gameplay statistics. The Unity engine the game is built on sends technical diagnostics, such as crash reports, to Unity. A
+duel with a friend by code connects through Unity or over your Wi-Fi network.</p>
+
+<h2>Who we are</h2>
+<p>Swap Duel is developed by Rigoraft. The person responsible for your data (the data controller) is
+<span id="owner-en">Artem Bobylev</span>, <span id="owner-country-en">Kazakhstan</span>. Write to
+<a href="mailto:support@rigoraft.com">support@rigoraft.com</a> about anything in this policy.</p>
+
+<h2>Your nickname</h2>
+<p>You can choose a nickname (2–16 characters: letters, digits, spaces, and the marks _ - . '), but you don’t have to. It’s stored on your
+phone. In a duel by code, it’s sent to your friend’s phone so they can see who they’re playing; their game also draws
+your avatar from it.</p>
+
+<h2>Duels with a friend by code</h2>
+<p>When you open a room, the game first tries to connect through Unity Relay, a service of Unity Technologies, and
+uses your Wi-Fi network only if that fails. When you join, the room code decides: an internet code goes through Unity
+Relay, a Wi-Fi code connects to your friend directly. A room code works until the room is closed, rematches included.</p>
+<p><strong>Over the internet</strong> (and every time the game tries it), the game signs in to Unity Gaming Services
+without registration: Unity creates a random player ID, kept on your phone and on Unity’s servers until it’s deleted.
+The moves, your nickname, and short connection checks pass through Unity Relay, which sees both phones’ IP addresses and keeps the IP address and
+player ID for 30 days.</p>
+<p><strong>Over Wi-Fi</strong> the phones connect to each other directly and nothing goes through Unity. This
+connection isn’t encrypted: someone else on the same network could see the moves and the nickname.</p>
+
+<h2>Technical diagnostics</h2>
+<p>The Unity engine the game is built on sends technical diagnostics to Unity Technologies: crash reports, reports when
+the game freezes, error traces, and other basic technical data about the game and the device, together with a random
+Unity installation ID. They help find and fix problems in the game. The game
+can’t turn them off. Unity keeps them for 90 days.</p>
+
+<h2>Unity as our processor</h2>
+<p>Unity Technologies processes the data of the duel by code and the diagnostics on our behalf, as our processor under
+the <a href="https://unity.com/legal/unity-data-processing-addendum-dpa">Unity data processing addendum</a>. Unity may
+process the data outside the European Union, under the Standard Contractual Clauses. More about how Unity handles data:
+<a href="https://unity.com/legal/game-player-and-app-user-privacy-policy">Unity’s privacy policy for game players and
+app users</a> and <a href="https://unity.com/legal/privacy-policy">Unity’s privacy policy</a>.</p>
+
+<h2>What stays on your phone</h2>
+<p>Your settings, nickname, win count, and score against the bot are stored only on your device. Android backup may
+copy them, together with the game’s random IDs (Unity’s among them), to your Google account and restore them on a new phone along
+with the rest of the game’s data.</p>
+
+<h2>What’s optional</h2>
+<p>The nickname is optional: the game works the same without it. The Unity connection is needed only
+for a duel by code over the internet; the rest of the game works without it. Diagnostics are part of how the engine
+works.</p>
+
+<h2>Letters to us</h2>
+<p>If you write to <a href="mailto:support@rigoraft.com">support@rigoraft.com</a>, we use your email address and what
+you write only to answer you, and delete the correspondence within 12 months after it ends. Letters pass through our
+email provider.</p>
+
+<h2>Legal basis</h2>
+<p>For players in the European Union, the United Kingdom, and other places with similar laws:</p>
+<ul>
+  <li>sending your nickname and moves to your friend and connecting through Unity in a duel by code: needed to run
+    the duel you asked for (Article 6(1)(b) GDPR);</li>
+  <li>technical diagnostics: our legitimate interest in a game that works and doesn’t crash (Article 6(1)(f) GDPR);</li>
+  <li>letters to us: our legitimate interest in answering you (Article 6(1)(f) GDPR).</li>
+</ul>
+
+<h2>Your right to object</h2>
+<p>To object to processing based on our legitimate interest (the diagnostics, answering your letters), write to <a href="mailto:support@rigoraft.com">support@rigoraft.com</a>.</p>
+
+<h2>Your rights</h2>
+<p>You can ask us for access to your data, to correct or delete it, to restrict its processing, and for a copy of it,
+and you can complain to the data protection authority in your country. Write to
+<a href="mailto:support@rigoraft.com">support@rigoraft.com</a>. Requests about the data Unity processes for us come to
+us as well. Unity’s data is tied only to random IDs that we can’t link to your name or email, so we
+may not be able to find your records; we’ll do what we can with the details you give us.</p>
+<p>We don’t sell your personal information and don’t share it for targeted advertising.</p>
+
+<h2>Deleting your data</h2>
+<p>Relay data and diagnostics are deleted automatically as described above; the Unity player ID stays on
+Unity’s servers until it’s deleted. Write to us if you want your data deleted sooner. To stop new data from being sent,
+uninstall the game. Uninstalling the game, or clearing its
+data, removes the nickname and all the IDs from your phone; a copy may stay in your Android backup and come back if you
+install the game again with the same Google account.</p>
+
+<h2>Children</h2>
+<p>The game isn’t directed at children under 13, and we don’t knowingly collect their data. If we learn that we have
+data of a child under 13, we’ll delete it.</p>
+
+<h2>Changes and questions</h2>
+<p>If this policy changes, we’ll update this page and the date at the top. Send questions about your data to
+<a id="contact-en-2" href="mailto:support@rigoraft.com">support@rigoraft.com</a>.</p>
+</article>
+
+<article lang="ru" id="ru">
+<h1>Политика конфиденциальности Swap Duel</h1>
+<p class="meta">Действует с 25 октября 2026 года · Разработчик: Rigoraft · Связь:
+<a id="contact-ru" href="mailto:support@rigoraft.com">support@rigoraft.com</a></p>
+
+<p><strong>Коротко.</strong> Swap Duel не требует регистрации и не спрашивает почту или телефон; ник — по желанию. Игра
+не просит доступ к контактам, фото, микрофону или геолокации, не показывает рекламу, покупок в игре нет. Эта
+версия игры не отправляет нам статистику. Движок Unity, на котором
+сделана игра, отправляет в Unity технические данные, например отчёты о сбоях. Дуэль с другом по коду идёт через Unity
+или через вашу Wi-Fi-сеть.</p>
+
+<h2>Кто мы</h2>
+<p>Swap Duel разрабатывает Rigoraft. За ваши данные отвечает (контролёр данных) <span id="owner-ru">Artem Bobylev</span>,
+<span id="owner-country-ru">Казахстан</span>. По любым вопросам об этой политике пишите на
+<a href="mailto:support@rigoraft.com">support@rigoraft.com</a>.</p>
+
+<h2>Ваш ник</h2>
+<p>Можно выбрать ник (2–16 знаков: буквы, цифры, пробелы и знаки _ - . '), но это не обязательно. Он хранится на
+телефоне. В дуэли по коду ник отправляется на телефон друга, чтобы он видел, с кем играет; по нику его игра рисует и
+ваш аватар.</p>
+
+<h2>Дуэль с другом по коду</h2>
+<p>Когда вы создаёте комнату, игра сначала пробует соединиться через Unity Relay — сервис Unity Technologies — и
+только если не вышло, использует вашу Wi-Fi-сеть. Когда вы входите в комнату, всё решает код: интернет-код идёт через
+Unity Relay, Wi-Fi-код соединяет с другом напрямую. Код комнаты действует, пока комната не закрыта, включая реванши.</p>
+<p><strong>Через интернет</strong> (и каждый раз, когда игра пробует этот путь) игра входит в Unity Gaming Services без
+регистрации: Unity создаёт случайный идентификатор игрока, который хранится на телефоне и на серверах Unity, пока его не
+удалят. Ходы, ваш ник и короткие проверки связи проходят через Unity Relay; Relay видит IP-адреса обоих телефонов и хранит IP-адрес и
+идентификатор игрока 30 дней.</p>
+<p><strong>Через Wi-Fi</strong> телефоны соединяются напрямую, через Unity ничего не идёт. Это соединение не
+шифруется: кто-то ещё в той же сети может увидеть ходы и ник.</p>
+
+<h2>Технические данные движка</h2>
+<p>Движок Unity, на котором сделана игра, отправляет в Unity Technologies технические данные: отчёты о сбоях и
+зависаниях, трассировки ошибок и другие базовые технические сведения об игре и устройстве — вместе со случайным
+идентификатором установки Unity. Они помогают находить и исправлять ошибки в игре. Отключить их в игре
+нельзя. Unity хранит их 90 дней.</p>
+
+<h2>Unity — наш обработчик</h2>
+<p>Данные дуэли по коду и технические данные движка Unity Technologies обрабатывает по нашему поручению, как наш
+обработчик, по <a href="https://unity.com/legal/unity-data-processing-addendum-dpa">соглашению Unity об обработке
+данных</a>. Unity может обрабатывать данные за пределами Евросоюза на основании стандартных договорных условий.
+Подробнее о том, как Unity обращается с данными:
+<a href="https://unity.com/legal/game-player-and-app-user-privacy-policy">политика конфиденциальности Unity для
+игроков и пользователей приложений</a> и <a href="https://unity.com/legal/privacy-policy">политика
+конфиденциальности Unity</a>.</p>
+
+<h2>Что остаётся на телефоне</h2>
+<p>Настройки, ник, счёт побед и счёт против бота хранятся только на устройстве. Резервное копирование Android может
+сохранить их вместе со случайными идентификаторами игры (в том числе Unity) в вашем аккаунте Google и перенести на новый
+телефон вместе с остальными данными игры.</p>
+
+<h2>Что не обязательно</h2>
+<p>Ник не обязателен: без него игра работает так же. Соединение с Unity нужно только для дуэли по коду
+через интернет; остальная игра работает без него. Технические данные — часть работы движка.</p>
+
+<h2>Письма нам</h2>
+<p>Если вы пишете на <a href="mailto:support@rigoraft.com">support@rigoraft.com</a>, мы используем ваш адрес и текст
+письма только чтобы ответить, и удаляем переписку в течение 12 месяцев после её окончания. Письма проходят через нашего
+почтового провайдера.</p>
+
+<h2>Правовое основание</h2>
+<p>Для игроков из Евросоюза, Великобритании и других мест с похожими законами:</p>
+<ul>
+  <li>отправка ника и ходов другу и соединение через Unity в дуэли по коду — нужны, чтобы провести дуэль, которую вы
+    запросили (статья 6(1)(b) GDPR);</li>
+  <li>технические данные движка — наш законный интерес в том, чтобы игра работала и не вылетала (статья 6(1)(f)
+    GDPR);</li>
+  <li>письма нам — наш законный интерес вам ответить (статья 6(1)(f) GDPR).</li>
+</ul>
+
+<h2>Ваше право возразить</h2>
+<p>Чтобы возразить против обработки на основании нашего законного интереса (технические данные движка, ответы на
+письма), напишите на <a href="mailto:support@rigoraft.com">support@rigoraft.com</a>.</p>
+
+<h2>Ваши права</h2>
+<p>Вы можете запросить доступ к своим данным, их исправление или удаление, ограничение обработки, получить копию
+данных, а также пожаловаться в орган по защите данных вашей страны. Пишите на
+<a href="mailto:support@rigoraft.com">support@rigoraft.com</a>. Запросы о данных, которые Unity обрабатывает для нас,
+тоже присылайте нам. Данные Unity привязаны только к случайным идентификаторам, которые мы не можем
+связать с вашим именем или почтой, поэтому найти ваши записи может не получиться; мы сделаем всё, что можно, по тем
+данным, которые вы сообщите.</p>
+<p>Мы не продаём ваши персональные данные и не передаём их для таргетированной рекламы.</p>
+
+<h2>Удаление данных</h2>
+<p>Данные Relay и технические данные движка удаляются автоматически в сроки, указанные выше;
+идентификатор игрока Unity остаётся на серверах Unity, пока его не удалят. Напишите нам, если хотите удалить данные
+раньше. Чтобы новые данные не отправлялись, удалите игру. Удаление игры или очистка её данных стирает с телефона ник и все идентификаторы; копия может остаться в
+резервной копии Android и вернуться, если снова установить игру с тем же аккаунтом Google.</p>
+
+<h2>Дети</h2>
+<p>Игра не предназначена специально для детей младше 13 лет, и мы сознательно не собираем их данные. Если узнаем, что у
+нас есть данные ребёнка младше 13 лет, мы их удалим.</p>
+
+<h2>Изменения и вопросы</h2>
+<p>Если политика изменится, мы обновим эту страницу и дату вверху. Вопросы о данных присылайте на
+<a id="contact-ru-2" href="mailto:support@rigoraft.com">support@rigoraft.com</a>.</p>
+</article>
+</main>
+</body>
+</html>
